@@ -1,4 +1,4 @@
-# import django_heroku
+import django_heroku
 import os
 
 
@@ -147,3 +147,7 @@ AUTHENTICATION_BACKENDS = [
 
 SOCIAL_AUTH_FACEBOOK_KEY = 859189147837520        
 SOCIAL_AUTH_FACEBOOK_SECRET = 'f8fbef9fd9c9a40e6b58133d5b5d7603'  
+
+
+#heroku deploy
+django_heroku.settings(locals())
