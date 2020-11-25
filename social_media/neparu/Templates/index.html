@@ -1,0 +1,179 @@
+{% load static %}
+
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <title>
+        {% block title %}
+            Neparu
+        {% endblock %}
+    </title>
+
+    
+
+
+    <meta name="viewport" content="width=device-width"> 
+    <link rel="icon" href="{% static "images/favicon.png"%}" type="image/icon type">
+
+    <!-- notification -->
+    <script type="text/javascript" src="{% static 'js/notifications.js' %}"></script>
+
+    <!-- message js -->
+    <link type="text/css" rel="stylesheet" href="{% static 'css/materialize.min.css' %}" />
+    <script type="text/javascript" src="{% static 'js/chat.js' %}"></script>
+    
+    <!-- comment collapse -->
+    <script src="{% static 'js/vendor/jquery.min.js' %}"></script>
+    <script src="{% static 'js/vendor/bootstrap.min.js' %}"></script>
+
+    <!-- fonts, style -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link href="{% static 'css/font-awesome/css/all.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+</head>
+<body>
+    {% if request.user_agent.is_pc %}
+    <div class="bg-overlay"><img src="{% static "images/background.png"%}" width="50%"></div>
+    {% endif %}
+    {% if request.user.is_staff == True %}
+    <section class="row">
+        <div class="sidebar-menu col-md-3 col-sm-4 col-xs-4"
+            style="position:fixed;height:auto;background-color: whitesmoke;padding:1%;min-height: 550px;">
+            <h3 class="center"> Welcome {{ request.user }}</h3>
+            <br>
+            <hr style="border:2px solid black">
+            <br>
+            <h4>
+                <a class="btn btn-primary" href="/neparu/"> Notification</a>
+                <a class="btn list-group-item" href="/neparu/admin/blood/none/0"> Blood Request</a>
+                <a class="btn list-group-item" href="/neparu/admin/queries/none/0"> Queries</a>
+                <a class="btn list-group-item" href="/neparu/admin/posts/none/0"> Posts</a>
+                <a class="btn list-group-item" href="/neparu/admin/rental/none/0"> Rental Service</a>
+                <a class="btn btn-primary" href="/neparu/admin/users/none/0">Users</a><hr>
+                <a class="btn btn-danger"  href="/neparu/pswd" >Change Password</a>
+                <a class="btn btn-danger"  href="{% url 'logout' %}"> Logout</a>
+            </h4>
+        </div>
+        
+    {% else %}
+        {% if request.user_agent.is_mobile %}
+        <nav class="mobnavbar flexrow navbar navbar-inverse navbar-fixed-top">
+            <img class="mobprof" src="{% static "images/neparu.png"%}"><a class="navbar-brand">Neparu </a>
+            {% if request.user.is_authenticated %}
+            <h3><a width="20%" class="fa fa-bars" data-toggle="modal" data-target="#settings"></a></h3>
+            {% endif %}
+        </nav>
+
+        <nav class="navbar navbar-inverse navbar-fixed-bottom" style="height:20px;padding:0 1% 0 1%">
+            <div class="mobnavbar flexrow">
+                <h4><a class="fa fa-home" href="/neparu/"></a></h4>
+                {% if request.user.is_authenticated %}
+                <h4><a class="fa fa-inbox" href="/neparu/msg"></a></h4>
+                <h4><a class="fa fa-search" href="/neparu/sathiharu"></a></h4>
+                <h4><a id="notification-alert" class="clicknotification far fa-bell" data-toggle="modal" data-target="#notifications"></a></h4>
+            </div>
+            <div style="float:right;margin-top:-40px">
+                <a href="/neparu/user/{{ request.user.id }}">
+                    <img class="mobprof" src="{{ request.user.photo.url }}">
+                </a>
+            {% endif %}
+            </div>
+        </nav>
+
+
+    
+        {% endif %}
+        <section class="row">
+            {% if request.user_agent.is_pc %}
+                <div class="sidebar-menu col-md-3 col-sm-4 col-xs-4" style="position:fixed;height:auto;background-color: whitesmoke;padding:1%">
+                                {% if request.user.is_authenticated %}
+                                    <div class="center">
+                                    <a class="shadow" href="" data-toggle="modal" data-target="#addFile">
+                                        <img class="mobprof1" src="{{ request.user.photo.url }}">   
+                                    </a>
+                                    </div>
+                                    <h4 class="center"> Hi {{ request.user }}</h4>
+                                    <h5 class="bio shadow center">{{ request.user.bio }}</h5><br>
+                                    <h5>
+                                        <a href="/neparu/friends/following/{{ request.user.id }}" class="shadow col-md-4 col-xs-4">Following {{ request.user.following.count }}</a>
+                                        <a href="/neparu/friends/followers/{{ request.user.id }}" class="shadow col-md-4 col-xs-4"> Followers {{ request.user.follower.count }}</a>
+                                        <a id="notification-alert"  class="clicknotification shadow col-md-2 col-xs-2 far fa-bell" data-toggle="modal" data-target="#notifications" style="font-size:20px"></a>
+                                    </h5>
+                                {% else %}
+                                <div class="center">
+                                    <img class="profile" src="{% static "images/neparu.png"%}">
+                                    <br><h3 class="shadow">Explore Together</h3>
+                                </div>
+                                {% endif %}
+                        <br>
+                        <br>
+                        <button type="button" class="btn btn-warning fas fa-chevron-down" data-toggle="collapse" data-target="#menubar" style="width: 100%;"></button>
+                        <div id="menubar" class="shadow collapse">
+                        <h4> 
+                                        {% if request.user.is_authenticated %}
+                                            <a class="list-group-item fa fa-home" href="/neparu/"> Home</a>
+                                            <a class="list-group-item fa fa-inbox" href="/neparu/msg"> Messages</a>
+                                            <a class="list-group-item fa fa-upload" href="/neparu/upost"> Upload Post</a>
+                                            <a class="list-group-item fa fa-search" href="/neparu/sathiharu"> Sathiharu</a>
+                                            <a class="list-group-item fa fa-bars" href="" data-toggle="modal" data-target="#settings"> Explore</a>
+                                        {% else %}
+                                            <a class="list-group-item fa fa-user" href="/neparu/signup/add"> Sign Up</a>
+                                            <a class="list-group-item fas fa-sign-in-alt" href="{% url 'login' %}"> Login</a>
+                                        {% endif %}
+                            </h4>
+                        </div>
+                    
+                </div> 
+            {% endif %}
+    {% endif %}
+        {% if request.user_agent.is_mobile %}
+            <div class="text-center" style="margin-left:-5%;padding:0;width:110%">
+        {% else %}
+            <div class="text-center col-md-8 col-sm-8 col-xs-8" style="float: right">
+        {% endif %}
+        {% if name and request.user_agent.is_pc %}
+            <h2 class="h2Pc jumbotron shadow">{{ name }}</h2>
+            <hr>
+        {% endif %}
+                    {% block login %}
+
+                    {% endblock %}
+            </div>
+    </section>
+
+</body>
+
+
+{% if request.user_agent.is_pc %}
+<footer style="margin-top:15%">
+    <h5 class="center">
+        Copyright &copy; {% now " Y " %} <a href="#">neparu</a> | Implementation: Sudish Basnet
+    </h5>
+</footer>
+{% endif %}
+
+    <!-- modals-->
+    {% include 'modals/addprofile.html' %}
+    {% include 'modals/setting.html' %}
+    {% include 'modals/notifications.html' %}
+    {% include 'modals/blood.html' %}
+    {% include 'modals/feedback.html' %}
+
+    <!-- scripts links -->
+    <!-- menubar -->
+    <script src="{% static 'js/main.js'%}"></script>
+    <!-- posts script -->
+    <script src="{% static 'js/index.js' %}"></script>
+    <!-- search scripts -->
+    <script src="{% static 'js/search.js' %}"></script>
+
+    <script src="{% static 'js/blood.js' %}"></script>
+    <script>
+        function tonee(){
+            tone = new Audio("{% static 'sounds/notification.mp3' %}");
+            tone.play();
+        }
+
+    </script>
+</html>

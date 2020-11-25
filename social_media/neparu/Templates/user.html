@@ -1,0 +1,64 @@
+{% extends 'index.html' %}
+
+{% block title %}
+User
+{% endblock %}
+
+{% block login %}
+
+<div class="jumbotron row" style="margin:0;background-color: gray;">
+    <div>
+    {% if request.user_agent.is_mobile %}
+    {% if user == request.user %}
+        <a class="shadow" data-toggle="modal" data-target="#addFile">
+            <img class="mobprof1" src="{{ user.photo.url }}">
+        </a>
+    {% else %}
+        <img class="mobprof1" src="{{ user.photo.url }}">
+    {% endif %}
+    {% else %}
+        <img class="mobprof1 left" src="{{ user.photo.url }}">
+    {% endif %}
+    </div>
+    <div class="col-md-10">
+    <h3 class="shadow"><a>{{ user.username }}</a></h3>
+    {% if request.user != user and request.user.is_staff == False %}
+        <form action='/neparu/follow' method="POST">
+            {% csrf_token %}
+            <input name='followuser' type='hidden' value="{{ user }}">
+            <input type="hidden" name="url" value="/neparu/user/{{ user.id }}">
+            <button  type="submit" class="btn btn-primary">  
+                {% if user in request.user.following.all %}
+                following
+                {% else %}
+                follow
+                {% endif %}
+            </button>
+        </form>
+        
+    {% endif %}
+    <h5>
+        {% if request.user != user %}
+            <a href="/neparu/msg/{{ request.user.id }}/{{ user.id }}" id="{{ users.id }}">Message</a> ||
+        {% endif %}
+        <a href="/neparu/friends/following/{{ user.id }}">Following {{ user.following.count }}</a> ||
+        <a href="/neparu/friends/followers/{{ user.id }}" >Followers {{ user.follower.count }}</a>
+    </h5>
+    <hr>
+    <h5>{{ user.email }}</h5>
+    <h6 class="bio">{{ user.bio }}</h6>
+    </div>
+</div>
+<hr>
+{% if user.account_type == "public" or  user in request.user.following.all or request.user == user %}
+    {% if post %}
+        {% include 'posts.html' %}
+    {% else %}
+        <h1 class="shadow" style="color:white">No Posts</h1>
+    {% endif %}
+{% else %}
+    <h2 class="shadow" style="color:white">Private Account<i class="fa fa-lock"></i></h2>
+
+{% endif %}
+
+{% endblock %}

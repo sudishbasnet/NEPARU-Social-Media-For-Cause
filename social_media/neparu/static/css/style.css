@@ -1,0 +1,268 @@
+body {
+    background: black;
+    margin:40px;
+    user-select: none; 
+    -ms-user-select: none; 
+    -webkit-user-select: none;
+    
+    
+}
+
+.list-group{
+    width:100%;
+}
+
+a {
+    color: #d8aa46;
+    text-decoration-line: none;
+    width:100%;
+
+}
+
+a:hover{
+        text-decoration: none;
+        color:black
+}
+
+
+.bg-overlay {
+    position: fixed;
+    width: 100%;
+    height: 90%;
+}
+
+
+.shadow {
+    text-shadow: 2px 8px 8px grey;
+}
+
+.msg{
+    width:70%; 
+    position: relative;
+    border-radius:20px;
+    margin:10px 0 0 10px;
+    padding:6px;
+    color:white;
+}
+
+.profile{
+    width:50%;
+    border-radius: 100%;
+    height: auto;
+    box-shadow: 5px 5px 5px grey;
+
+}
+
+.profile1{
+    width:15%;
+    border-radius: 100%;
+    height: auto;
+    box-shadow: 5px 5px 5px grey;
+
+}
+
+.mobprof{
+    width:50px;
+    border-radius: 100%;
+    height:50px;
+    border:2px solid black;
+}
+
+.mobprof1{
+    width:100px;
+    border-radius: 100%;
+    height:100px;
+    border:2px solid black;
+}
+
+
+.scrollx{
+    overflow-x: scroll;
+    height:150px;
+}
+
+
+.msgprofile{
+    width:60px;
+    height:60px;
+    border-radius:100%;
+    margin-right:10px;
+    float: left;
+
+}
+
+#msgdiv{
+    height:70%;
+    overflow-y:scroll;
+    border-top:2px solid black;
+    border-bottom:2px solid black;
+}
+
+.absolute{
+    position: absolute;
+}
+
+
+
+
+
+.bio {
+		text-decoration: none;
+		color:#A1C69C;
+		animation-name: color;
+		animation-duration:3S;
+		animation-iteration-count: infinite;
+		}
+
+@keyframes color{
+        25%{color:black;}
+        25%{color:lightgray;}
+        25%{color:lightsalmon;}
+        25%{color:red;}
+        }
+        
+
+.change{
+		text-decoration: none;
+		color:black;
+		animation-name: color1;
+		animation-duration:1S;
+		animation-iteration-count: infinite;
+		}
+
+@keyframes color1{
+        50%{color:black;}
+        50%{color:red;}
+        }
+
+
+.popover-content {
+      font-size: 12px;
+  }
+
+.rental {
+    border:2px solid black;
+    text-align: left;
+}
+
+.rentalImg {
+    height:100%;
+    margin-right:5%;
+}
+
+.followers {
+    background-color: gray;
+    border-radius:20px 20px 20px 0;
+}
+
+
+.mobnavbar{
+    height:40px;
+    padding:0 1% 0 1%;
+}
+
+
+.navbar .mobnavbar h4{
+    margin-right:15%;
+}
+
+
+.mobDiv {
+    width:100%;
+    margin-bottom:-30px;
+}
+
+.h2Pc{
+    height: 50px;
+    margin-top:-1px;
+    padding-top:2%;
+}
+
+.msgImg{
+    width:50%;
+    border:2px solid black;
+    margin:1%;
+}
+
+.msgSearchForm{
+    width:100%;
+}
+
+.h3Msg{
+    margin:-5% 0 0 0;
+}
+
+.h5Msg{
+    width:100%;
+    background-color: gray;
+}
+
+.unreadMsg {
+    background-color: white;
+    height:50px;
+    color:black
+}
+
+
+
+
+.rentalPrice {
+    width:100%
+}
+
+.sathiharu{
+    background-color: gray;
+    border-radius:20px 20px 20px 0;
+}
+
+
+.modalDialog{
+    margin:20% 0 0 0;
+    width:100%;
+}
+
+
+strong{
+    font-size: 14px;
+    color:red;
+    font-family: "Times New Roman", Times, serif;
+}
+
+label{
+    font-size: 14px;
+}
+
+
+img {
+    image-orientation:from-image;
+}
+
+
+a{
+    cursor: pointer;
+}
+
+
+
+
+.login{
+    width:200px
+}
+
+
+
+
+.like-post {
+    color: red;
+    font-size: 24px;
+}
+
+
+.flexrow{
+    display: flex;
+    flex-direction: row;
+}
+
+a:focus {
+    outline: 0;
+}

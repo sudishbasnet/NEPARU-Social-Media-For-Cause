@@ -1,0 +1,26 @@
+<!--Modal to upload profile-->
+{% if request.user_agent.is_mobile %}
+<div class="modalDialog modal fade" id="feedback" role="dialog">
+    {% else %}
+    <div class="modal fade" id="feedback" role="dialog">
+        {% endif %}
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" style="font-size: 35px;">&times;</button>
+            <h4 class="modal-title">Provide Feedbacks or Issues</h4>
+        </div>
+        <div class="modal-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="title">Your words</label>
+                    <input type="text" class="feedback form-control" id="feedbackcontent" placeholder="It is fun using neparu" required>
+                    <span id="span" style="Color:red"></span>
+                </div>
+                <button class="sendfeedback btn btn-primary">Send</button>
+
+
+            </form>
+    </div>
+    </div>
+    </div>
+    

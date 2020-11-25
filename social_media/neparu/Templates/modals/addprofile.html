@@ -1,0 +1,26 @@
+{% if request.user_agent.is_mobile %}
+    <div class="modal fade" id="addFile" role="dialog" style="height:210px;width:100%">
+{% else %}
+    <div class="modal fade" id="addFile" role="dialog" style="height:250px">
+{% endif %}
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" style="font-size: 35px;">&times;</button>
+                <h4 class="modal-title">Change Profile</h4>
+            </div>
+            <div class="modal-body">
+                <form action="/neparu/addProfile" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input type="file" class="form-control-file" name="profileimage" required>
+                    </div>
+                
+            </div>
+            <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" name>Change Profile</button>
+                    </form>
+            </div>
+
+</div>
+
+

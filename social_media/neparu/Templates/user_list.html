@@ -1,0 +1,11 @@
+{% if sathiharu %}
+    {% for user in sathiharu %}
+        <div class="sathiharu flexrow">
+            <img class="msgprofile" src="{{ user.photo.url }}">
+            <h4><a href="/neparu/user/{{ user.id }}">{{ user }}</a></h4>
+        </div><br>
+    {% endfor %}
+{% else %}
+<p>No User found.</p>
+{% endif %}
+

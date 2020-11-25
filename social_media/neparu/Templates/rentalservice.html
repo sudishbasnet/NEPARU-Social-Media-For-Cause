@@ -1,0 +1,80 @@
+{% extends 'index.html' %}
+{% block title %}
+Rental
+{% endblock %}
+{% block login %}
+<div class="jumbotron">
+    <div class="left">
+        <button class="addspace btn btn-primary">Add Space</button>
+        <a href="/neparu/rental/0"><button class="btn btn-success">Search</button></a>
+    </div>
+    <hr>
+    <div id="rentalservice">
+        <h4 class="center">Search Flats, Room, homes</h4>
+        <hr>
+        <form>
+            {% csrf_token %}
+            <div class="form-inline">
+                <label class="left" for="option"">What you wish to search ??  
+                    <select id="option" class="form-control" onclick="searchRental()">
+                        <option value =''>All</option>
+                        <option>Homes</option>
+                        <option>Flats</option>
+                        <option>Rooms</option>
+                        <option>Shops</option>
+                    </select>
+                </label>
+                <label class="left" for="option"">Filter by booked spaces  
+                    <select id="filterbook" class="form-control" onclick="searchRental()">
+                        <option value=''>All</option>
+                        <option>Booked</option>
+                    </select>
+                </label>
+            </div>
+            <div class="rentalPrice flexrow left">
+                <input class="form-control" id="range" type="number" placeholder="Price Range Below" onkeyup="searchRental()">
+                <input class="form-control" id="requirenum" type="number" placeholder="Required Number of Space" onkeyup="searchRental()">
+            </div>
+            <input id="rentallocation" type="text" class="form-control" placeholder="Enter Address to Search" onkeyup="searchRental()">
+        </form>
+    </div>
+
+
+
+    <div id="rentalservice1" style="display: none;">
+        <h4 class="center">Add Flats, Room, homes</h4>
+        <hr>
+        <form  method="post" action='/neparu/rental/0' enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-inline">
+                <label class="left" for="title">What you want to publish ??  
+                    <select name="title" class="form-control">
+                        <option value="Homes">Homes</option>
+                        <option value="Flats">Flats</option>
+                        <option value="Rooms">Rooms</option>
+                        <option value="Shops">Shops</option>
+                    </select>
+                </label>
+            </div>
+
+            <div class="rentalPrice flexrow left">
+                <input class="rentalRange form-control" name="price" type="number" placeholder="Price" required>
+                <input class="form-control" name="space_no" type="number" placeholder="Number of Available space" required>
+            </div>
+            <label class="left" for="description">Description</label>
+            <textarea name="description" class="form-control" placeholder="Extra details that needs to be included whie someone search" style="max-width: 100%;" required></textarea><br>
+            <input type="file" class="form-control" name="photo" id="photo" multiple required>
+            <input type="text" class="form-control" name="location" placeholder="Space Location" required>
+            <button class="right btn-primary">Add Space</button>
+        </form>
+    </div>
+
+
+
+</div>
+
+<div id="rentaldata">
+        {% include 'rental.html' %}
+</div>
+
+{% endblock %}

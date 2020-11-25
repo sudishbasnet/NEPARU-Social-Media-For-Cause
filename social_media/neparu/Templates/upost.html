@@ -1,0 +1,28 @@
+{% extends 'index.html' %}
+
+{% block title %}
+Upload Post
+{% endblock %}
+
+{% block login %}
+
+<div class="jumbotron">
+    <h3 class="shadow">Add Post</h3><br>
+    <form method="post" action='/neparu/upost' enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="title">Caption</label>
+            <input type="text" class="form-control" name="title" id="title" placeholder="Hello Sunday" required>
+        </div>
+        <div class="form-group">
+            <label for="photo">Photo</label>
+            <input type="file" class="form-control" name="photo" id="photo" multiple required>
+        </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+
+    </form>
+</div>
+
+
+
+{% endblock %}

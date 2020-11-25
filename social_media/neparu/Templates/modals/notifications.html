@@ -1,0 +1,127 @@
+{% load static %}
+{% if request.user_agent.is_mobile %}
+<div class="modalDialog modal fade" id="notifications" role="dialog">
+{% else %}
+<div class="modal fade" id="notifications" role="dialog">
+{% endif %}
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" style="font-size: 35px;">&times;</button>
+        <h4 class="modal-title center">Notifications</h4>
+    </div>
+    
+    <ul id="notificationdiv">
+        {% for alerts in request.user.notification_receiver.all %}
+            {% if alerts.action == 'blood' %}
+                <li class="btn-danger" style="padding:10px;border:2px solid black;text-align: left;">
+                <h5>
+                    <a href="/neparu/user/{{ alerts.actor.id }}">
+                    {{ alerts.actor }}
+                    </a>
+                </h5>
+                <p>{{ alerts.description }}{{ alerts.content }}</p>
+                <h5 id="blood_info{{ alerts.id }}">
+                {% if request.user in alerts.blood_available.all %}
+                    <button id="{{ alerts.id }}" class="blood_available btn-warning">Cancel if you aren't available</button>
+                {% else %}
+                    <button id="{{ alerts.id }}" class="blood_available btn-success">If you are available, click here</button>
+                {% endif %}
+                </h5>
+                <h6 style="color:black">
+                {% if alerts.blood_group %}
+                Blood Group needed : {{ alerts.blood_group }}
+                {% endif %}
+                <br>
+                Location : {{ alerts.location }}
+                <br>
+                {{ alerts.created_at }}
+                </h6>        
+                </li>
+            {% else %}
+                <li class="list-group-item">
+                <div class="left" >
+                    <a href="/neparu/user/{{ alerts.actor.id }}">
+                    {% if alerts.actor.is_staff ==  True %}
+                        <a class="fa fa-hand-point-right">Neparu</a>
+                    {% else %}
+                        {{ alerts.actor }}
+                    {% endif %}
+                    </a>
+                    {{ alerts.content }}
+                    {{ alerts.description }}
+                </div>
+                {% if alerts.post %}
+                    <a href="/neparu/gallery/{{ alerts.post.id }}">
+                    <img class="right" src="{{ alerts.post_photo }}" alt="view" style="width:50px;height:30px;border:2px solid black">
+                    </a>
+                {% elif alerts.rental %}
+                <a href="/rental/{{ alerts.rental.id }}">
+                    <img class="right" src="{{ alerts.post_photo }}" alt="view" style="width:50px;height:30px;border:2px solid black">
+                </a>
+                {% endif %}
+                <br><br>
+                {{ alerts.created_at }}
+                                
+                </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+
+</div>
+
+
+
+
+<script>
+    notification_reciever = "{{ request.user.id }}";
+    $(function () {
+        if (notification_reciever > 0) {
+        //calling function in every 1 second
+        setInterval(receiveNotification,1000)
+
+                // $.ajax({
+                //     type: 'POST',
+                //     url: "/neparu/online",
+                //     data: {
+                //         id:notification_reciever,
+                //         active_status: 'online',
+                //         csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                //     },     // our data object
+                //     success: function (data) {
+                //         console.log('online')
+
+                //     },
+                //     error: function (xhr, errmsg, err) {
+                //         console.log(xhr.status + ": " + xhr.responseText);
+                //     }
+                // });
+
+
+
+
+
+
+
+        }
+
+        // else{
+        //      $.ajax({
+        //         type: 'POST',
+        //         url: "/neparu/online",
+        //         data: {
+        //             active_status : 'offline',
+        //             csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+        //         },     // our data object
+        //         success: function (data) {
+        //             console.log('online')
+
+        //         },
+        //         error: function (xhr, errmsg, err) {
+        //             console.log(xhr.status + ": " + xhr.responseText);
+        //         }
+        //     });
+        // }
+    })
+
+
+
+</script>

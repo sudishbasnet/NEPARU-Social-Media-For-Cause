@@ -1,0 +1,22 @@
+{% extends 'index.html' %}
+{% block title %}
+Sathiharu
+{% endblock %}
+{% block login %}
+<div class="jumbotron" style="padding:5%">
+    <h2 class="shadow">Sathiharu</h2>
+    <form method='post' >
+        {% csrf_token %}
+        <input type="hidden" value="0" id="action">
+        <input type="text" id="searchdata" class="form-control" placeholder="Search Sathiharu" onkeyup="searchFriends()">
+    </form>
+</div>
+
+<div id="querydata" style="padding:5%">
+    {% include 'user_list.html' %}
+</div>
+
+
+
+{% endblock %}
+

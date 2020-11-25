@@ -1,0 +1,81 @@
+{% if request.user_agent.is_mobile %}
+<div class="modalDialog modal fade" id="blood" role="dialog" >
+{% else %}
+<div class="modal fade" id="blood" role="dialog" >
+{% endif %}
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" style="font-size: 35px;">&times;</button>
+        <h5 class="modal-title">Ask For Blood</h5>
+    </div>
+    <i style="color:darkgray;">You can request blood once in 24 hrs after that it will be automatically deleted</i>
+    <form style="margin:1%;margin-bottom:15%;">
+        {% csrf_token %}
+            <label for="bloodgroupname">Blood Group</label>
+            <select class="form-control" id="bloodgroup" name="bloodgroup">
+                <option value=""></option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+            </Select>
+        
+        
+    
+        <label for="location">Location</label>
+        <input type="text" class="form-control" id="location" placeholder="Location where the blood needed">
+
+        <input id="campaign" type="checkbox" > <label for="campaign">Is your purpose for blood request is for donation campaign ?</label>
+        <textarea id="description" class="form-control" placeholder="Description about the campaign....." style="visibility: hidden;margin-top:-50px;"></textarea>
+        <input id="checkbox" type="checkbox" required> <label for="checkbox">Are you sure to request ?</label>
+
+        <div id="submitblood">
+            <i id="warn" style="color: red;"></i>
+            <i id="warn1" style="color: red;"></i>
+            <button type="submit" class="saveblood right btn btn-primary">Send Request</button>         
+        </div>
+
+    </form>
+
+  
+    <h5 class="modal-header" style="border:2px solid black">Blood Requested Record</h5>
+    <table class="table table-striped">
+        <thead>
+            <tr style="font-size:12px;">
+                <th>Blood Request id</th>
+                <th>Blood Needed</th>
+                <th>Donor or Available person details</th>
+            </tr>
+        </thead>
+        <tbody style="font-size:12px;">
+            {% for infos in request.user.notification_actor.all %}
+                {% if infos.action == 'blood' %}
+                    <tr id="{{ infos.id }}">
+                        <td>{{ infos.id }}<br><br> <button id="{{ infos.id }}" class="cancel_blood btn-danger">Cancel Request</button></td>
+                        {% if infos.blood_group %}
+                            <td>{{ infos.blood_group }}</td>
+                        {% else %}
+                            <td>For Campaign</td>
+                        {% endif %}
+                        <td>
+                            {% if infos.blood_available.all %}
+                                {% for users in infos.blood_available.all %}
+                                    Username : <a href="/neparu/user/{{ users.id }}">{{ users.username }}</a> <br> Mail : {{ users.email }}<br> Contact no : {{ users.contact }}<hr>
+                                {% endfor %}
+                            {% else %}
+                                None Available
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+            
+</div>
+
+

@@ -1,0 +1,10 @@
+<tr id="post{{ post.id }}">
+    <td>{{ post.id }}</td>
+    <td width="50%">{{ post.title }}</td>
+    <td>{{ post.report.count }}</td>
+    <td>{{ post.actor }}</td>
+    <td>{{ post.uploaded_at }}</td>
+    <td>
+        <a href="/neparu/gallery/{{ post.id }}" style="width:20px;height:10px;border:2px solid black">View</a>
+    </td>
+</tr>

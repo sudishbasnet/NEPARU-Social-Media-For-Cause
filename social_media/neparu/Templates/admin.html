@@ -1,0 +1,56 @@
+{% extends 'index.html' %}
+
+{% block title %}
+{{ name }}
+{% endblock %}
+
+{% block login %}
+<div class="jumbotron" style="height:140%;">
+    {% if request.user.is_staff == True %}
+	{% if action == 'add' or action == 'update' %}
+		{% load crispy_forms_tags %}
+		<form class="adminform col-md-12" method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+			{{ form | crispy }}
+			<button type="submit" class="btn btn-primary" style="float: right;">{{ action }}</button>
+		</form>
+		
+    {% else %}
+        <div style="display: flex;flex-direction:column;">
+        {% if location == 'users' or location == 'none' or location == 'dashboard' %}
+            <a href="/neparu/admin/{{ location }}/add/0">
+                <button class="btn-priamry" style="width:150px;text-align: left;font-size:14px;float:left">Add New {{ name }}</button>
+            </a>
+        {% endif %}
+
+        {% if location == 'users' %}
+			<a href="/neparu/admin/users/staff/0">
+				<button class="btn-warning" style="width:150px;text-align: left;font-size:14px;float:left">Filter By Staff</button>
+            </a>
+			<a href="/neparu/admin/users/user/0">
+				<button class="btn-success" style="width:150px;text-align: left;font-size:14px;float:left">Filter By Users</button>
+            </a>
+            <input type="text" id="action" value="admin" hidden>
+            <input type="text" id="searchdata" class="form-control" placeholder="Search users" onkeyup="searchFriends()">
+        
+        {% elif location == 'posts' %}
+            <a href="/neparu/admin/posts/normal/0">
+                <button class="btn-warning" style="width:150px;text-align: left;font-size:14px;float:left">Filter By No Reports</button>
+            </a>
+            <a href="/neparu/admin/posts/report/0">
+                <button class="btn-success" style="width:150px;text-align: left;font-size:14px;float:left">Filter By Reports</button>
+            </a>
+		
+        {% endif %}
+        </div>
+	{% endif %}
+		
+	{% if action == 'none' or action == 'staff' or  action == 'user' or action == 'normal' or action == 'report' %}
+		<div id="querydata">
+			{% include 'admintable.html' %}
+		</div>
+    {% endif %}
+
+    {% endif %}
+</div>  
+{% endblock %}

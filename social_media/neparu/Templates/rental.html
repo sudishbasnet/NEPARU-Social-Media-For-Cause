@@ -1,0 +1,80 @@
+{% if rentaldetails.count > 0 %}
+{% for rental in rentaldetails %}
+    <div class="jumbotron" id="{{ rental.id }}">
+        <div class="scrollx flexrow" width="100%" height="250px" style="margin: 0;padding: 0;">
+            {% for photo in rental.rentalphoto.all %}
+                <img class="rentalImg" src="{{ photo.photo.url }}">
+            {% endfor %}
+        </div>
+        <br>
+        <section class="rental">
+        <div id="description{{ rental.id }}">
+            {{ rental.description }}
+        </div>
+        <table class="table" style="font-size: 14px;">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Number of space</th>
+                    <th>Service Price</th>
+                    <th>Location</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="title{{ rental.id }}">{{ rental.title }}</td>
+                    <td id="space_no{{ rental.id }}">{{ rental.space_no }}</td>
+                    <td id="price{{ rental.id }}">{{ rental.price }}</td>
+                    <td id="location{{ rental.id }}">{{ rental.location}}</td>
+                </tr>
+            </tbody>
+        </table>
+        Uploaded By : <a href="/neparu/user/{{ rental.actor.id }}">{{ rental.actor }}</a><br>
+        Published Date : {{ rental.published_date}}
+        </section>
+
+        {% if rental.actor == user %}
+        {% if rental.bookedby.all.count > 0 %}
+            <table class="table-hover">
+                <tbody>
+                    <h4 class="left">Space Booking List</h4>
+                    {% for actor in rental.bookedby.all %}
+                    <tr>
+                        <td class="row">
+                            <input type="hidden" value="{{ rental.id }}" id="rental{{ actor.id }}">
+                            <section id="book{{ actor.id }}">
+                                {% if actor in rental.book_accepted.all %}
+                                    <button class="acceptBooking btn-danger" id="{{ actor.id }}" style="width:150px;">Ignore Booking</button>
+                                {% else %}
+                                    <button class="acceptBooking btn-primary" id="{{ actor.id }}" style="width:150px;">Accept Booking</button>
+                                {% endif %}
+                            </section>
+                            Username : <a href="/neparu/user/{{ actor.id }}">{{ actor }}</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+        {% endif %}
+        
+
+        {% if rental.actor == user %}
+            <button class="right fa fa-edit btn-success" id="{{ rental.id }}" data-toggle="modal" data-target="#rental{{ rental.id }}" style="height:25px">Edit space</button>
+            <button class="removeSpace right btn-danger" id="{{ rental.id }}">Remove Space</button>
+        {% else %}
+            <div id="bookSpace{{ rental.id }}">
+            {% if user in rental.bookedby.all %}
+                <button class="spaceBook right btn-danger" id="{{ rental.id }}">Cancel Booking now</button>
+            {% else %}
+                <button class="spaceBook right btn-success" id="{{ rental.id }}">Book now</button>
+            {% endif %}
+            </div>
+        {% endif %}
+
+    </div>
+    {% include 'modals/editrental.html' %}
+{% endfor %}  
+{% else %}
+No rental space data
+{% endif %}

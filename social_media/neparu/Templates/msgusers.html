@@ -1,0 +1,9 @@
+{% if sathiharu %}
+{% for data in sathiharu %}
+<div>
+    <a href="/msg/{{ user.id }}/{{ data.id }}">
+        <img class="msgprofile" src="{{ data.photo.url }}"><br><h6>{{ data }}</h6><br>
+    </a>
+</div>
+{% endfor %}
+{% endif %}

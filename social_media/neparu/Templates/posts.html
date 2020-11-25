@@ -1,0 +1,106 @@
+{% load static %}
+{% for feed in post %}
+{% if feed.actor in request.user.following.all or feed.actor == request.user or request.user.is_staff == True %}
+<br>
+<div class="jumbotron" id="posts{{ feed.id }}" style="padding:10% 0 0 0">
+    <section class="row" style="margin:-8% 3% -4% 0;">
+        <h3 class="shadow col-sm-1 left">
+            <a href="/neparu/user/{{ feed.actor.id }}">{{ feed.actor }}</a>
+        </h3>
+        
+        <h2 class="dropdown">
+            <button class="btn btn-primary dropdown-toggle right" type="button" data-toggle="dropdown">Action
+            </button>
+            <ul class="dropdown-menu">
+                {% if request.user == feed.actor  or request.user.is_staff == True %}
+                <a href="" class="edit-post btn btn-success fa fa-edit" data-toggle="modal" data-target="#editpost{{ feed.id }}"></a>
+                <a href="" class="delete-post btn btn-danger fa fa-minus-circle" id="{{ feed.id }}" name="delete-post"></a>
+                {% else %}
+                    {% if request.user in feed.report.all %}
+                    <a href="" class="report-post btn btn-danger" id="rep{{ feed.id }}" name="report-post">Cancel Report</a>
+                    {% else %}
+                    <a href="" class="report-post btn btn-danger" id="rep{{ feed.id }}" name="report-post">Report Post</a>
+                    {% endif %}
+                {% endif %}
+            </ul>
+        </h2>
+        {% include 'modals/editpost.html' %}
+        
+    </section>
+    <hr>
+    <div>
+        <div class="left" style="width:6%;display:flex;flex-direction: column;">
+            {% if request.user.is_staff == False %}
+            <div id='like{{ feed.id }}' >
+                {% if request.user in feed.like.all %}
+                <a class="like-post fa fa-heart" id="{{ feed.id }}"></a>
+                {% else %}
+                <a class="like-post fa fa-heart-broken" id="{{ feed.id }}"></a>
+                {% endif %}
+            </div>
+            <h6 id='like1{{ feed.id }}'>{{ feed.like.count }}</h6>
+            {% endif %}
+            
+        </div>
+        <h5 class="center" style="margin-left:15%;width:80%;background-color: lightgray" id="title{{ feed.id }}">{{ feed.title }}</h5>
+
+        {% if feed.my_photo.count == 1 %}
+        {% for photo in feed.my_photo.all %}
+        {% if request.user_agent.is_pc %}
+            <a class="like-post"><img id="{{ feed.id }}" height="50%" src="{{ photo.photo.url }}"></a>
+        {% else %}
+            <div style="background-color: white;width:100%;height:50%">
+                <a class="like-post"><img id="{{ feed.id }}" style="max-width: 100%;max-height: 100%;" src="{{ photo.photo.url }}"></a>
+            </div>
+        {% endif %}
+        {% endfor %}
+        {% else %}
+        <a class="like-post">
+        {% if request.user_agent.is_pc %}
+            <div class="scrollx flexrow" style="width:65%;height:50%;margin-left:20%">
+        {% else %}
+            <div class="scrollx flexrow" style="width:100%;height:45%">
+        {% endif %}
+            {% for photo in feed.my_photo.all %}
+                <img id="{{ feed.id }}" style="max-width: 100%;max-height: 100%;margin-right: 5%;" src="{{ photo.photo.url }}" style="margin-right:5%;"> 
+            {% endfor %}
+        </div>
+        </a>
+        {% endif %}
+    </div>
+
+    <button type="button" class="btn btn-primary " data-toggle="collapse" data-target="#com{{ feed.id }}" style="width:95%;margin-top:20px">Show Every Comments <i class="fa fa-bars"></i></button>
+        <div id="com{{ feed.id}}" class="collapse" style="margin:3%">
+            {% for comment in feed.my_comments.all %}
+                <h6 id="cmm{{ comment.id }}">
+                    <a href="/neparu/user/{{ comment.actor.id }}" class='col-md-2 col-xs-3'>{{ comment.actor }}</a>
+                    {% if request.user == comment.actor or feed.actor == request.user %}
+                    <button class="delComment btn-danger fa fa-minus-circle right" id="cid{{ comment.id }}"></button>
+                    {% endif %}
+                    <span style="background-color: lightgray;" class="col-ms-6 col-xs-12">{{ comment.content }}</span>
+                </h6>
+                
+            {% endfor %}
+
+        </div>
+
+
+
+
+
+    <form style="margin-top:20px">
+        {% csrf_token %}
+        
+            <input type="text" placeholder="Comment Here" id="content{{ feed.id }}" required {% if request.user_agent.is_mobile %} style="width:73%" {% else %} style="width:89%"  {% endif %} style="float:left;margin-left:3%">
+        <button class="addcomment btn btn-success fa fa-plus-circle" id="{{ feed.id }}"></button>
+    </form>
+    <br><br>
+</div>
+{% endif %}
+{% endfor %}
+
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="popover"]').popover();
+    });
+</script>

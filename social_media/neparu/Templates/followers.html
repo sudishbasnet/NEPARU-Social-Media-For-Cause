@@ -1,0 +1,18 @@
+{% extends 'index.html' %}
+
+{% block title %}
+Followers list
+{% endblock %}
+
+{% block login %}
+    <div class="col-md-12 col-sm-4 row" style="margin-top:10%;">
+        {% for user in users %}
+            <div class="followers flexrow">
+                <img class="msgprofile" src="{{ user.photo.url }}">
+                <h4><a href="/neparu/user/{{ user.id }}">{{ user }}</a></h4>
+            </div><br>
+
+        {% endfor %}
+        </div>
+    
+{% endblock %}

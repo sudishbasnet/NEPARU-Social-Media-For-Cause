@@ -1,0 +1,267 @@
+<br>
+<br>
+<table class="table table-condensed">
+    
+
+    {% if users %}
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Email</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr id="user{{ user.id }}">
+            {% if user.is_staff %}
+                <td>{{ user }}</td>
+            {% else %}
+                <td><a href="/neparu/user/{{ user.id }}">{{ user }}</a></td>
+            {% endif %}
+            <td>{{ user.first_name }}</td>
+            <td>{{ user.last_name }}</td>
+            <td>{{ user.email }}</td>
+            <td>
+                <a class="fa fa-edit" href="/neparu/admin/users/update/{{ user.id }}" style="Width:20px;"></a>
+                {% if request.user.is_staff == True %}
+                    <button id="{{ user.id }}" class="deleteuser btn-danger fa fa-user-minus"></button>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+
+
+    {% elif post %}
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Reports</th>
+            <th>Actor</th>
+            <th>Uploaded Date</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for post in post %}
+            {% if action == 'normal' %}
+                {% if post.report.count == 0 %}
+                    {% include 'posttable.html' %}
+                {% endif %}
+            {% elif action == 'report' %}
+                {% if post.report.count != 0 %}
+                    {% include 'posttable.html' %}
+                {% endif %}
+            {% else %}
+                {% include 'posttable.html' %}
+            {% endif %}
+        {% endfor %}
+    </tbody>
+
+
+
+    {% elif notifications %}
+    <thead>
+        <tr>
+            <th>Description / Content</th>
+            <th>Receiver</th>
+            <th>Uploaded Date</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for notification in notifications %}
+        <tr id="notification{{ notification.id }}">
+            <td>{% if notification.description %}
+                {{ notification.description }}
+                {% else %}
+                {{ notification.content }}
+                {% endif %}
+            </td>
+            <th>All</th>
+            <td>{{ notification.created_at }}</td>
+            <td>
+                <a class="btn-success fa fa-edit" href="/neparu/admin/dashboard/update/{{ notification.id }}" style="width:20px"></a> ||
+                <button id="{{ notification.id }}" class="deletenotification btn-danger fa fa-minus-circle"></button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+
+
+
+    {% elif bloods %}
+    <thead>
+        <tr>
+            <th>Description / Content</th>
+            <th>Blood Group</th>
+            <th>Uploaded Date</th>
+            <th>User</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for blood in bloods %}
+        <tr id="blood{{ blood.id }}">
+            <td width="40%">{{ blood.description }}{{ blood.content }}</td>
+            <td>{{ blood.blood_group }}</td>
+            <td>{{ blood.created_at }}</td>
+            <td><a href="/neparu/user/{{ blood.actor.id }}">{{ blood.actor }}</a></td>
+            <td>
+                <a class="btn-success fa fa-edit" href="/neparu/admin/blood/update/{{ blood.id }}"
+                    style="width:20px"></a> ||
+                <button id="{{ blood.id }}" class="deletebloodrequest btn-danger fa fa-minus-circle"></button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+
+
+
+
+
+    {% elif rentals %}
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>User</th>
+            <th>Booked By</th>
+            <th>Booked Accepted</th>
+            <th>Publish Date</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for rental in rentals %}
+        <tr id="rental{{ rental.id }}">
+            <td>{{ rental.title }}</td>
+            <td><a href="/neparu/user/{{ rental.actor.id }}">{{ rental.actor }}</a></td>
+            <td>{% if rental.bookedby.all %}
+                    {% for book in rental.bookedby.all %}
+                        {{ book }},
+                    {% endfor %}
+                {% else %}
+                    No bookings
+                {% endif %}
+            </td>
+            <td>
+                {% if rental.book_accepted.all %}
+                    {% for book in rental.book_accepted.all %}
+                        {{ book }},
+                    {% endfor %}
+                {% else %}
+                    No bookings accepted
+                {% endif %}
+            </td>
+            <td>{{ rental.published_date }}</td>
+            <td>
+                <a class="btn-success fa fa-edit" href="/neparu/admin/rental/update/{{ rental.id }}" style="width:20px"></a>
+                ||
+                <button id="{{ rental.id }}" class="deleterental btn-danger fa fa-minus-circle"></button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+
+
+    {% elif queries %}
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Content</th>
+            <th>Uploaded Date</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for msg in queries %}
+        <tr id="msg{{ msg.id }}">
+            <td><a href="/neparu/user/{{ msg.sender.id }}">{{ msg.sender }}</a></td>
+            <td>{{ msg.message }}</td>
+            <td>{{ msg.created_at }}</td>
+            <td>
+                <a href="/neparu/msg/{{ request.user.id }}/{{ msg.sender.id }}" >Reply</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+
+    {% else %}
+    <p style="color:darkred">No data to show</p>
+    {% endif %}
+
+
+</table>
+ 
+{% if location == 'dashboard' %}
+<div>
+
+    <div id="piechart"></div>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script type="text/javascript">
+        // Load google charts
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        // Draw the chart and set the chart values
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+                ['Task', 'Hours per Day'],
+                ['Number of Users in Neparu', {{ sa }}],
+                ['Number of Posts in Neparu', {{ ca }}],
+                ['Number of Comments in Neparu', {{ da }}],
+                ['Number of Photos in Neparu', {{ na }}],
+            ]);
+
+        // Optional; add a title and set the width and height of the chart
+        var options = { 'title': 'Overall System Report', 'height': 300 };
+
+        // Display the chart inside the <div> element with id="piechart"
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        chart.draw(data, options);
+        }
+    </script>
+
+</div>
+<hr>
+
+<h5 class="text-center">System events and attributes rate</h5>
+<div class="progress" style="height:25px;">
+    <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar"
+        style="width:{{ nepuser }}%">
+        Total Neparu Users beside Staff : {{ nepuser }}%
+    </div>
+</div>
+<div class="progress" style="height:25px;">
+    <div class="progress-bar progress-bar-striped active" role="progressbar" style="width:{{ reports }}%;">
+        Reported Post Rate per Users : {{ reports }}%
+    </div>
+</div>
+<div class="progress" style="height:25px;">
+    <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar"
+        style="width:{{ bloodreq }}%">
+        Total Blood Request Rate by Users : {{ bloodreq }}%
+    </div>
+</div>
+<div class="progress" style="height:25px;">
+    <div class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar"
+        style="width:{{ staffper }}%">
+        Neparu Staff Rate : {{ staffper }}%
+    </div>
+</div>
+<div class="progress" style="height:25px;">
+    <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar"
+        style="width:{{ rentalrate }}%">
+        Neparu Rental Rates per Users : {{ rentalrate }}%
+    </div>
+</div>
+
+
+
+{% endif %}

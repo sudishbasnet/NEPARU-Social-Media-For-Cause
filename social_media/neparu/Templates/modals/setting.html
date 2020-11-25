@@ -1,0 +1,28 @@
+{% if request.user_agent.is_mobile %}
+<div class="modalDialog modal fade" id="settings" role="dialog" style="height:100%;">
+{% else %}
+<div class="modal fade" id="settings" role="dialog" style="height:65%">
+{% endif %}
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title center">Explore <i class="fa fa-bars-o"></i></h4>
+            </div>
+            <div class="modal-body">
+                <ul class="list center">
+                {% if request.user_agent.is_pc %}
+                    <h3><a class="btn btn-default fa fa-photo" href="/neparu/gallery/0"> Gallery</a></h3>
+                {% else %}
+                    <h3><a class="btn btn-default" href="/neparu/upost"> Upload Posts</a></h3>
+                {% endif %}
+                    <h3><a class="btn btn-default" href="/neparu/feedback/{{ request.user.id }}" data-toggle="modal" data-target="#feedback"">Provide feedbacks or issues</a></h3>
+                    <h3><a id="notification-alert" class="btn btn-success" href="" data-toggle="modal" data-target="#blood"">Request Blood</a></h3>
+                    <h3><a class="btn btn-success" href="/neparu/rental/0">Rental Service</a></h3>
+                    <hr>
+                    <h3 ><a href="/neparu/signup/update" class="btn btn-danger">Change Information</a></h3>
+                    <h3><a href="/neparu/pswd" class="btn btn-danger">Change Password</a></h3>
+                    <h4><a class="list-group-item fa fa-sign-out" href="{% url 'logout' %}"> Logout</a></h4>
+                    
+                </ul>
+
+            </div>
+</div>

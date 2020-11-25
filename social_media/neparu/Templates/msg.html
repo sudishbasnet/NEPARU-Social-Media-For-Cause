@@ -1,0 +1,33 @@
+{% extends 'online.html' %}
+{% block form %}
+{% endblock %}
+{% block msgcontent %}
+
+        {% for msg in inboxcontent %}
+            {% if msg.sender == request.user %}
+                {% if msg.message %}
+                    <div class="msg right" style="background-color:gray;">
+                        <h6>{{ msg.message }}</h6>
+                    </div>
+                {% endif %}
+                {% if msg.image %}
+                    <img class="msgImg right" src="{{ msg.image.url }}" >
+                {% endif %}
+            {% else %}
+                {% if msg.message %}
+                    <div class="msg bg-primary left">
+                        <h6>{{ msg.message }}</h6>
+                    </div>
+                {% endif %}
+                {% if msg.image %}
+                    <img class="msgImg left" src="{{ msg.image.url }}" >
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    <script>
+    $(function () {
+        //calling function in every 2 second
+        setInterval(receive,1000)
+    })
+    </script>
+{% endblock %}

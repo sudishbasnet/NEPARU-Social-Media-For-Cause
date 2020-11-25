@@ -1,0 +1,107 @@
+{% extends 'index.html' %}
+{% block login %}
+    {% if not request.user.is_staff %}
+        {% if request.user_agent.is_mobile %}
+            <form class="msgSearchForm" method='post' style="margin-top: 2%;">
+        {% else %}
+            <form class="msgSearchForm" method='post' style="margin-top: -2%;">
+        {% endif %}
+                {% csrf_token %}
+                <input type="hidden" value="1" id="action">
+                <input type="text" id="searchdata" class="form-control" placeholder="Search Sathiharu" onkeyup="searchFriends()">
+            </form>
+            <div class="scrollx flexrow" id="querydata" style="margin-bottom:-80px">
+                {% include 'msgusers.html' %}
+            </div>
+            <br>
+    {% endif %}
+
+        <div class="jumbotron" style="margin-bottom: 0;">
+            <h3 class="h3Msg">
+            {% if receiver.username %}
+            <a href="/neparu/user/{{ receiver.id }}">{{ receiver.username }}</a>
+            {% else %}
+            <a>Messages</a>
+            {% endif %}
+            </h3>
+            <div id="msgdiv">
+                {% block msgcontent %}
+                    {% for msg in unread %}
+                        <h5 class="h5Msg list-group-item row">
+                            <a class="col-md-1 col-xs-3" href="/user/{{ msg.sender.id }}">
+                                <img class="msgprofile" src="{{ msg.sender.photo.url }}">                      
+                                {{ msg.sender }}
+                            </a>
+                        <a class="unreadMsg col-md-10 col-xs-8 right" href="/msg/{{ msg.receiver.id }}/{{ msg.sender.id }}" id="{{ msg.receiver.id }}">
+                        {{ msg.message }}
+                        </a>
+                        </h5>
+                        <br>
+
+                    {% endfor %}
+
+
+                {% endblock %}
+            </div>  
+             
+
+            <div style="height:60px;">
+            <form id="inboxform" class="{% block form %}hide{% endblock %}" method="post" enctype="multipart/form-data" >
+                {% csrf_token %}
+                <div class="flexrow">
+                    <h3><label for="img" class="fas fa-image " style="cursor: pointer;font-size: 26px;"> </label> </h3>
+                    <input id="message" class="form-control" name="message" type="text" placeholder="Type your message..">
+                    <h3><label for="send" class="fas fa-paper-plane" style="color:rgb(2, 161, 214);cursor: pointer;font-size: 26px;"></label></h3>
+                </div>
+                {% if request.user_agent.is_mobile %}
+                <div class="flexrow" style="margin-top:-15%;">
+                {% else %}
+                <div class="flexrow" style="margin-top:-8%;">
+                {% endif %}
+                <input type="text" name="receiver" style="visibility:hidden;" value="{{ receiver }}">
+                <input id="img" type="file" name="image" style="visibility:hidden;">
+                <input id="send" type="submit" name="send" style="visibility:hidden;">
+                </div>
+            </form>
+            </div>
+            </div>
+ 
+
+
+{% load staticfiles %}
+    <script>
+// to sent message
+        $(function () {
+            ScrollY();
+            ScrollY();
+            ScrollY();
+            $('#inboxform').on('submit', function (event) {
+                event.preventDefault();
+                var formData = new FormData(this);
+                var message = $('#message');
+                var img = $('#img');
+                $.ajax({
+                    url: "/neparu/inbox",
+                    type: 'POST',
+                    data: formData,
+                    success: function (response) {
+                            send('{{ request.user.username }}', '{{ receiver.username }}', message.val(),response.imgurl);
+                            message.val('');
+                            img.val('');
+                    },
+                    cache: false,
+                    contentType: false,
+                    processData: false
+                });
+                
+            })
+        })   
+        
+        
+    // to receive message
+        SenderId = "{{ receiver.id }}";
+        ReceiverId = "{{ request.user.id }}";
+
+        
+    </script>
+{% endblock %}

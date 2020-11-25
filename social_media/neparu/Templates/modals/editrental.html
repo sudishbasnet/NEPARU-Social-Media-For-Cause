@@ -1,0 +1,50 @@
+<!--Modal to upload profile-->
+{% if request.user_agent.is_mobile %}
+<div class="modalDialog modal fade" id="rental{{ rental.id }}" role="dialog">
+    {% else %}
+    <div class="modal fade" id="rental{{ rental.id }}" role="dialog">
+        {% endif %}
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" style="font-size: 35px;">&times;</button>
+            <h4 class="modal-title">Edit Rental Space</h4>
+        </div>
+        <div class="modal-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-inline">
+                    <label class="left" for="title">What you want to publish ??
+                        <select id="t{{ rental.id }}" class="form-control" value="{{ rental.title }}">
+                            <option value="Homes">Homes</option>
+                            <option value="Flats">Flats</option>
+                            <option value="Rooms">Rooms</option>
+                            <option value="Shops">Shops</option>
+                        </select>
+                    </label>
+                </div>
+                
+                <div class="rentalPrice flexrow left">
+                    <input class="rentalRange form-control" id="p{{ rental.id }}" type="number" value="{{ rental.price }}" placeholder="price" required>
+                    <input class="form-control" id="s{{ rental.id }}" type="number" value="{{ rental.space_no }}" placeholder="space number" required>
+                </div>
+                <label class="left" for="description">Description</label>
+                <textarea id="d{{ rental.id }}" class="form-control" placeholder="description" style="max-width: 100%;" required>{{ rental.description }}</textarea><br>
+                <input type="text" class="form-control" id="l{{ rental.id }}" value="{{ rental.location }}" placeholder="location" required>
+                <button type="submit" data-dismiss="modal" class="saverental btn btn-primary right" id="rent{{ rental.id }}">Update Data</button>
+
+            </form>
+
+            <hr>
+            <label>Delete Photos</label><br>
+            <div class="form-group">
+                {% for photo in rental.rentalphoto.all %}
+                <div id="img{{ photo.id }}">
+                    <button type="submit" class="deleterentalimg btn btn-danger fa fa-minus-circle left"
+                        id="{{ photo.id }}"></button>
+                    <img src="{{ photo.photo.url }}" width="50%">
+                </div><br>
+                {% endfor %}
+
+            </div>
+
+        </div>
+    </div>
