@@ -11,3 +11,5 @@ python-social-auth
 social-auth-app-django
 # for test
 coverage
+#for deploy
+django-heroku
